@@ -1,10 +1,6 @@
-const num = 266219
-const numA = num.toString().split('');
-let sumA = numA;
-for (let i = 1; i < numA.length; ++i) {
-  sumA *= numA[i];
-}
-console.log(sumA);
-let degree = sumA ** 3;
-let degreeCut = degree.toString().substring(0, 2);
-console.log(degreeCut);
+let num = 266219;
+let newArr = num.toString().split('');
+console.log(newArr);
+let res = newArr.reduce((acc, rec) => acc * rec);
+console.log(res);
+console.log((res ** 3).toString().slice(0, 2))
