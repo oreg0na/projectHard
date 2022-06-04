@@ -1,80 +1,94 @@
 'use strict';
 
-const hiddenNumber = function (myNumber, min, max) {
+const appData = {
+    title: '',
+    screens: '',
+    screenPrice: 0,
+    service1: '',
+    service2: '',
+    allServicePrices: 0,
+    fullPrice: 0,
+    rollback: 0,
+    servicePercentPrice: 0,
+    adaptive: true,
+    isNumber: function (num) {
+        return !isNaN(parseFloat(num)) && isFinite(num);
+    },
+    asking: function () {
+        appData.title = prompt('Как называется ваш проект?', 'Название проекта');
+        appData.screens = prompt('Какие типы экранов нужно разработать?', 'Простые, Сложные');
 
-    let startGame;
-    let gameOver;
-    let attempts = 10;
+        do {
+            appData.screenPrice = prompt('Сколько будет стоить данная работа?');
+        }
+        while (!appData.isNumber(appData.screenPrice));
 
-    startGame = confirm("Угадай число от 1 до 100?");
+        appData.adaptive = confirm('Нужен ли адаптив на сайте?');
+    },
+    getRollbackMessage: function (price) {
+        if (price > 30000) {
+            return 'Даем скидку в 10%';
+        } else if (15000 < price && price <= 30000) {
+            return 'Даем скидку в 5%';
+        } else if (0 <= price && price <= 15000) {
+            return 'Скидка не предусмотрена';
+        } else {
+            return 'Что то пошло не так';
+        }
+    },
+    getAllServicePrices: function () {
+        let sum = 0;
+        let num1,
+            num2;
 
-    if (startGame) {
+        for (let i = 0; i < 2; i++) {
 
-        takeNumber(myNumber, attempts);
+            if (i === 0) {
+                appData.service1 = prompt('Какой дополнительный тип услуги нужен?', 'Дополнительная услуга 1');
 
-    } else {
-        gameOver = alert("Игра окончена");
-    }
-};
+                do {
+                    num1 = prompt('Сколько это будет стоить?');
+                }
+                while (!appData.isNumber(num1));
 
-const takeNumber = function (unknowNum, attempts) {
-    let enterNumber;
+            } else if (i === 1) {
+                appData.service2 = prompt('Какой дополнительный тип услуги нужен?', 'Дополнительная услуга 2');
 
-    console.log(attempts);
-
-    enterNumber = prompt('Введите число от 1 до 100');
-
-    if (enterNumber === null) {
-        return alert('Игра окончена');
-    }
-
-    while (enterNumber.trim() == '' || !isFinite(enterNumber)) {
-        alert('Введите число!');
-        enterNumber = prompt('Введите число от 1 до 100');
-    }
-
-    enterNumber = Number(enterNumber);
-
-    attempts--;
-
-    if (enterNumber < unknowNum) {
-        numLessAlert(attempts);
-    }
-
-    if (enterNumber > unknowNum) {
-        numMoreAlert(attempts);
-    }
-
-    if (enterNumber === unknowNum) {
-        return alert('Поздравляю, Вы угадали!!!');
-    }
-
-
-    if (attempts === 0) {
-        let choose;
-
-        choose = confirm('Попытки закончились, хотите сыграть еще?');
-
-        if (choose) {
-            attempts = 10;
+                do {
+                    num2 = prompt('Сколько это будет стоить?');
+                }
+                while (!appData.isNumber(num2));
+            }
+        }
+        sum = +num1.trim() + +num2.trim();
+        return sum;
+    },
+    getFullPrice: function (screenPrice, allServicePrices) {
+        return screenPrice + allServicePrices;
+    },
+    getTitle: function (string) {
+        let lowCase = string.trim().toLowerCase();
+        let uppCase = lowCase.charAt(0).toUpperCase() + lowCase.slice(1);
+        return uppCase;
+    },
+    getServicePercentPrices: function (fullPrice, rollback) {
+        return fullPrice - rollback;
+    },
+    start: function () {
+        appData.asking();
+        appData.allServicePrices = appData.getAllServicePrices();
+        appData.fullPrice = appData.getFullPrice(+appData.screenPrice.trim(), appData.allServicePrices);
+        appData.rollback = appData.fullPrice * (15 / 100);
+        appData.servicePercentPrice = Math.ceil(appData.getServicePercentPrices(appData.fullPrice, appData.rollback));
+        appData.title = appData.getTitle(appData.title);
+        appData.logger();
+    },
+    logger: function () {
+        for (let key in appData) {
+            console.log(key);
         }
     }
 
-    takeNumber(unknowNum, attempts);
 };
 
-const numLessAlert = function (attempt) {
-
-    alert('Загаданное число больше, осталось ' + attempt + ' попыток');
-};
-
-const numMoreAlert = function (attempt) {
-
-    alert('Загаданное число меньше, осталось ' + attempt + ' попыток');
-};
-
-function getRandomInt(min, max) {
-    return Math.floor(Math.random() * (max - min)) + min;
-}
-
-hiddenNumber(getRandomInt(1, 100)) > 10;
+appData.start();
