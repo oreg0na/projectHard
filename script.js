@@ -1,80 +1,58 @@
 'use strict';
 
-const hiddenNumber = function (myNumber, min, max) {
-
-    let startGame;
-    let gameOver;
-    let attempts = 10;
-
-    startGame = confirm("Угадай число от 1 до 100?");
-
-    if (startGame) {
-
-        takeNumber(myNumber, attempts);
-
-    } else {
-        gameOver = alert("Игра окончена");
-    }
+const isNumber = function (num) {
+    return !isNaN(parseFloat(num)) && isFinite(num) && num != 0;
 };
 
-const takeNumber = function (unknowNum, attempts) {
-    let enterNumber;
+function gameBot(counter) {
+    let x = Math.ceil(Math.random() * 100);
 
-    console.log(attempts);
-
-    enterNumber = prompt('Введите число от 1 до 100');
-
-    if (enterNumber === null) {
-        return alert('Игра окончена');
-    }
-
-    while (enterNumber.trim() == '' || !isFinite(enterNumber)) {
-        alert('Введите число!');
-        enterNumber = prompt('Введите число от 1 до 100');
-    }
-
-    enterNumber = Number(enterNumber);
-
-    attempts--;
-
-    if (enterNumber < unknowNum) {
-        numLessAlert(attempts);
-    }
-
-    if (enterNumber > unknowNum) {
-        numMoreAlert(attempts);
-    }
-
-    if (enterNumber === unknowNum) {
-        return alert('Поздравляю, Вы угадали!!!');
-    }
-
-
-    if (attempts === 0) {
-        let choose;
-
-        choose = confirm('Попытки закончились, хотите сыграть еще?');
-
-        if (choose) {
-            attempts = 10;
+    function compare() {
+        let userNumber = prompt('Угадай число от 1 до 100');
+        let storageWin = {
+            condition: userNumber == x,
+            message: 'Поздравляю, Вы угадали!!! Хотели бы сыграть еще?'
+        };
+        let storageLose = {
+            condition: counter == 0,
+            message: 'Попытки закончились, хотите сыграть еще?'
         }
+
+        if (userNumber == null) { counter = 0; thx(); };
+
+        function results(condition, message) {
+
+            if (condition === true) {
+                playAgain(message);
+            } else {
+                numCheckout(!isNumber(userNumber), ('Введи число! Осталось попыток: ' + counter));
+                numCheckout((userNumber < x), ('Загаданное число больше. Осталось попыток: ' + counter));
+                numCheckout((userNumber > x), ('Загаданное число меньше. Осталось попыток: ' + counter));
+            }
+        };
+
+        function numCheckout(condition, message) {
+
+            if (condition === true && counter != 0) {
+                counter--;
+                confirm(message) ? compare() : thx();
+            }
+        };
+
+        function playAgain(message) {
+            confirm(message) === true ? gameBot(9) : thx();
+        };
+
+        function thx() {
+            counter = 0;
+            alert('Спасибо за игру, до свидания :)');
+            return gameBot;
+        };
+
+        results(storageWin.condition, storageWin.message);
+        results(storageLose.condition, storageLose.message);
     }
-
-    takeNumber(unknowNum, attempts);
+    compare();
 };
 
-const numLessAlert = function (attempt) {
-
-    alert('Загаданное число больше, осталось ' + attempt + ' попыток');
-};
-
-const numMoreAlert = function (attempt) {
-
-    alert('Загаданное число меньше, осталось ' + attempt + ' попыток');
-};
-
-function getRandomInt(min, max) {
-    return Math.floor(Math.random() * (max - min)) + min;
-}
-
-hiddenNumber(getRandomInt(1, 100)) > 10;
+gameBot(9);
