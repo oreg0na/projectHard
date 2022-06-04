@@ -1,19 +1,22 @@
 'use strict';
 
-let arr = ['222', '22', '2', '4444', '524', '64', '72'];
+let arr = [];
+let letters = prompt('Введите больше или меньше 30 символов', 'Надо дописать еще немного');
 
-arr.forEach((item) => {
-    if (item.startsWith('2') || item.startsWith('4')) {
-        console.log(item);
-    }
-});
-
-nextPrime:
-for (let i = 2; i < 100; i++) {
-
-    for (let j = 2; j < i; j++) {
-        if (i % j == 0) continue nextPrime;
-    }
-
-    console.log(i + ' Делители этого числа: 1 и ' + i);
+function myfunc(str) {
+    if (typeof str !== 'string') {
+        return 'Не строка';
+    } else {
+        let strCut = str.trim();
+        if (strCut.length > 30) {
+            strCut = strCut.substring(0, 30) + '...';
+            return strCut;
+        } else {
+            return 'Попробуйте ввести больше символов';
+        }
+    };
 };
+
+
+alert(myfunc(letters));
+console.log(myfunc(arr));
