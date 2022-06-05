@@ -1,30 +1,33 @@
 'use strict';
 
-const date = new Date();
-let week = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье'];
-let str = '';
-let ital = '';
-let today = '';
+const onScreen = document.body;
 
-let checkFont = function (font) {
-    week.forEach(function (item, index) {
-        if (font === 'str') {
-            str += item + '<br>';
-        } else if (font === 'ital') {
-            ital += ' ' + `<i>${item}</i>` + ' ' + '<br>';
-        } else if (font === 'today') {
-            if (date.getDay() == index + 1) {
-                today += ' ' + `<b>${item}</b>` + ' ' + '<br>';
-            } else { today += item + '<br>' }
-        }
-    });
-};
+const dateNow = new Date();
 
-checkFont('str');
-checkFont('ital');
-checkFont('today');
+const listWeeks = [
+  'Понедельник',
+  'Вторник',
+  'Среда',
+  'Четверг',
+  'Пятница',
+  'Суббота',
+  'Воскресенье',
+];
 
-raw.innerHTML = week;
-column.innerHTML = str;
-italic.innerHTML = ital;
-todayBold.innerHTML = today;
+for (let item in listWeeks) {
+  if (item === '5' || item === '6') {
+    onScreen.insertAdjacentHTML('beforeend', `<p><i>${listWeeks[item]}</i></p>`);
+  } else {
+    onScreen.insertAdjacentHTML('beforeend', `<p>${listWeeks[item]}</p>`);
+  }
+
+  if (dateNow.getDay() - 1 === +item) {
+    const nowDay = document.querySelectorAll('p');
+    nowDay[item].innerHTML = '';
+    if (item === '5' || item === '6') {
+      nowDay[item].insertAdjacentHTML('beforeend', `<b>${listWeeks[item]}</b>`);
+    } else {
+      nowDay[item].insertAdjacentHTML('beforeend', `<b>${listWeeks[item]}</b>`);
+    }
+  }
+}
