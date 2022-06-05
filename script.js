@@ -1,21 +1,13 @@
 "use strict";
-# Усложненная задача 1
-let arr = [
-    23,
-    43,
-    47,
-    55,
-    65,
-    74,
-    94,
-];
+# Усложненная задача 2
+let n = 100;
 
-const sorter = function (arr) {
-    arr.forEach(element => {
-        if (element.toString()[0] == 2 || element.toString()[0] == 4) {
-            console.log(element);
-        }
-    });
-};
+nextStep:
+for (let i = 2; i <= n; i++) {
 
-sorter(arr);
+    for (let j = 2; j < i; j++) {
+        if (i % j == 0) continue nextStep;
+    }
+
+    console.log(i);
+}
