@@ -1,19 +1,21 @@
-'use strict';
+"use strict";
+# Усложненная задача 1
+let arr = [
+    23,
+    43,
+    47,
+    55,
+    65,
+    74,
+    94,
+];
 
-let arr = ['222', '22', '2', '4444', '524', '64', '72'];
-
-arr.forEach((item) => {
-    if (item.startsWith('2') || item.startsWith('4')) {
-        console.log(item);
-    }
-});
-
-nextPrime:
-for (let i = 2; i < 100; i++) {
-
-    for (let j = 2; j < i; j++) {
-        if (i % j == 0) continue nextPrime;
-    }
-
-    console.log(i + ' Делители этого числа: 1 и ' + i);
+const sorter = function (arr) {
+    arr.forEach(element => {
+        if (element.toString()[0] == 2 || element.toString()[0] == 4) {
+            console.log(element);
+        }
+    });
 };
+
+sorter(arr);
